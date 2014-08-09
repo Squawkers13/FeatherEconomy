@@ -1,0 +1,30 @@
+settings:
+    # General plugin settings, not much to do here...
+    general:
+        # Enables automatic updating and update checking.
+        # It is recommended you don't change this!
+        auto-update: true
+        # How often (in seconds) to check for updates.
+        # Set to 0 to disable.
+        # NOTE: If this is set to 0, an update check will STILL be performed on startup!
+        update-interval: 43200 
+        # Whether to anonymously send some trivial data (version, max players, etc) to the MCStats servers.
+        stats: true
+    # Economy settings.
+    # You'll want to look at these.
+    economy:
+        # The name of your currency.
+        currency-name: coin
+        # The plural name of your currencey.
+        currency-name-plural: coins
+        # The amount of money players recieve when they join for the first time.
+        default-balance: 100
+    # DO NOT TOUCH THIS!!!
+    # This is essential to the survival of your configuration settings!
+    config-version: 1.0
+            
+    
+        
+    
+
+    

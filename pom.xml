@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~ Copyright (C) 2014 Squawkers13
+~
+~ This program is free software: you can redistribute it and/or modify
+~ it under the terms of the GNU General Public License as published by
+~ the Free Software Foundation, either version 3 of the License, or
+~ (at your option) any later version.
+~
+~ This program is distributed in the hope that it will be useful,
+~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+~ GNU General Public License for more details.
+~
+~ You should have received a copy of the GNU General Public License
+~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.pekkit</groupId>
+    <artifactId>FeatherEconomy</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+    </properties>
+    <name>FeatherEconomy</name>
+    <description>Light as a feather</description>
+    <url>http://dev.bukkit.org/bukkit-plugins/feather-economy/</url>
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>gravity-repo</id>
+            <url>http://repo.gravitydevelopment.net</url>
+        </repository>
+        <repository>
+            <id>Plugin Metrics</id>
+            <url>http://repo.mcstats.org/content/repositories/public</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>net.gravitydevelopment.updater</groupId>
+            <artifactId>updater</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mcstats.bukkit</groupId>
+            <artifactId>metrics</artifactId>
+            <version>LATEST</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <showDeprecation>false</showDeprecation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>net.gravitydevelopment.updater:updater</include>
+                                    <include>org.mcstats.bukkit</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>net.gravitydevelopment.updater</pattern>
+                                    <pattern>org.mcstats.bukkit</pattern>
+                                    <shadedPattern>net.pekkit.feathereconomy</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>target/classes/plugin.yml</file>
+                    <replacements>
+                        <replacement>
+                            <token>maven-version-number</token>
+                            <value>${project.version}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+            <!--<plugin>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>2.6</version>
+            </plugin>-->
+        </plugins>
+    </build>
+    <distributionManagement>
+        <repository>
+            <id>pekkit-repo</id>
+            <url>file:///C:/Apache24/domains/repo_pekkit/</url>
+        </repository>
+    </distributionManagement>
+    <issueManagement>
+        <url>https://github.com/Squawkers13/Feather-Economy/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:git@github.com:Squawkers13/Feather-Economy.git</connection>
+        <url>scm:git:git@github.com:Squawkers13/Feather-Economy.git</url>
+        <developerConnection>scm:git:git@github.com:Squawkers13/Feather-Economy.git</developerConnection>
+    </scm>
+</project>

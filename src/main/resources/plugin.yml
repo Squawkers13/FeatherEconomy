@@ -1,0 +1,35 @@
+name: FeatherEconomy
+main: net.pekkit.feathereconomy.FeatherEconomy
+version: maven-version-number
+description: Light as a feather
+author: Squawkers13
+website: http://dev.bukkit.org/bukkit-plugins/feather-economy/
+commands:
+    econ:
+        aliases: [feathereconomy, economy]
+        description: Manage the server's economy.
+    balance:
+        aliases: [bal, money]
+        description: View your balance.
+    pay:
+        description: Pay a player from your balance.
+permissions:
+    feathereconomy.balance.view:
+        description: View your balance.
+        default: true
+    feathereconomy.balance.other:
+        description: View another player's balance.
+        default: op
+    feathereconomy.pay:
+        description: Pay another player from your balance.
+        default: true
+    feathereconomy.set:
+        description: Set a player's balance.
+        default: op
+    feathereconomy.update:
+        description: Be notified of and manually download updates.
+        default: op
+    feathereconomy.reload:
+        description: Reload the plugin's configuration.
+        default: op
+    
