@@ -7,8 +7,8 @@ while still providing a lightweight and simple player experience.
 
 Features
 
-    Full UUID support
-    Custom currency names
-    Basic economy commands (/balance, /pay)
-    Automatic updates
-    Lightweight developer API 
+* Full UUID support
+* Custom currency names
+* Basic economy commands (/balance, /pay)
+* Automatic updates
+* Lightweight developer API 
