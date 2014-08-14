@@ -1,8 +1,8 @@
 settings:
-    # General plugin settings, not much to do here...
+    # General plugin settings. 
     general:
-        # Enables automatic updating and update checking.
-        # It is recommended you don't change this!
+        # Enables automatic downloading of updates.
+        # NOTE: If you're looking to disable update checking COMPLETELY, refert to the plugin page on BukkitDev.
         auto-update: true
         # How often (in seconds) to check for updates.
         # Set to 0 to disable.
@@ -12,11 +12,12 @@ settings:
         stats: true
     # Economy settings.
     economy:
-        # The name of your currency.
+        # The singular name of your currency.
         currency-name: coin
         # The plural name of your currencey.
         currency-name-plural: coins
-        # The amount of money players recieve when they join for the first time.
+        # The amount of money players recieve when they join for the first time. 
+        # Set to 0 and they won't get any.
         default-balance: 100
     # DO NOT TOUCH THIS!!!
     # This is essential to the survival of your configuration settings!

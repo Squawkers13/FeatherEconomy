@@ -85,17 +85,23 @@ public class FeatherEconomy extends JavaPlugin {
         }
 
         // --- Updater registration ---
-        MessageSender.log("&bPerforming update check...");
-
-        if (getConfig().getBoolean("settings.general.auto-update", true)) {
-            updater = new FeatherUpdater(this, Constants.UPDATER_ID, getFile(), Updater.UpdateType.DEFAULT, true);
+        if (getConfig().getBoolean("update-check", true)) {
+            if (getConfig().getBoolean("settings.general.auto-update", true)) {
+                MessageSender.log("&bPerforming update check...");
+                updater = new FeatherUpdater(this, Constants.UPDATER_ID, getFile(), Updater.UpdateType.DEFAULT, true);
+                updateResult = updater.getResult();
+            } else {
+                MessageSender.log("&bPerforming update check...");
+                updater = new FeatherUpdater(this, Constants.UPDATER_ID, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+                updateResult = updater.getResult();
+            }
         } else {
-            updater = new FeatherUpdater(this, Constants.UPDATER_ID, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+            MessageSender.log("&cUpdate checking has been disabled!");
+            MessageSender.log("&cPlease regularly check for updates by running &a/econ update&c!");
         }
-
-        updateResult = updater.getResult();
-
-        if (updateResult.equals(Updater.UpdateResult.UPDATE_AVAILABLE)) { //Needs update
+        if (updateResult == null) {
+            //Do nothing
+        } else if (updateResult.equals(Updater.UpdateResult.UPDATE_AVAILABLE)) { //Needs update
             MessageSender.log("&bUpdate found! Type /econ update to download.");
         } else if (updateResult.equals(Updater.UpdateResult.SUCCESS)) { //Update downloaded
             MessageSender.log("&bUpdate downloaded! Restart the server to activate.");
@@ -150,22 +156,13 @@ public class FeatherEconomy extends JavaPlugin {
      *
      * @return
      */
-    public boolean isUpdateAvail() {
-        return updater.getResult().equals(Updater.UpdateResult.SUCCESS)
-                || updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE);
-    }
-
-    /**
-     *
-     * @return
-     */
     public UpdateResult getUpdateResult() {
         return updateResult;
     }
 
     /**
      * Internal use only please!
-     * 
+     *
      * @param result
      */
     public void setUpdateResult(UpdateResult result) {

@@ -6,7 +6,7 @@ author: Squawkers13
 website: http://dev.bukkit.org/bukkit-plugins/feather-economy/
 commands:
     econ:
-        aliases: [feathereconomy, economy]
+        aliases: [feathereconomy, economy, eco, fe]
         description: Manage the server's economy.
     balance:
         aliases: [bal, money]

@@ -64,14 +64,16 @@ public class EconCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 1) {
             MessageSender.sendMsg(sender, "&bFeatherEconomy &a" + plugin.getDescription().getVersion() + ", &bcreated by &aSquawkers13");
-            if (sender.hasPermission("feathereconomy.update") && plugin.isUpdateAvail()) {
-                if (plugin.getUpdateResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE)) { //Needs update
+            if (sender.hasPermission("feathereconomy.update")) {
+                if (plugin.getUpdateResult() == null) {
+                    MessageSender.sendMsg(sender, "&cUnable to determine update status! Please run &a/econ update&c.");
+                } else if (plugin.getUpdateResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE)) { //Needs update
                     MessageSender.sendMsg(sender, "&bUpdate available: Type &a/econ update&b to download.");
                 } else if (plugin.getUpdateResult().equals(Updater.UpdateResult.SUCCESS)) { //Update downloaded
                     MessageSender.sendMsg(sender, "&bUpdate downloaded: Restart the server to activate.");
-                } else { //Up to date, as far as we know
+                } else if (plugin.getUpdateResult().equals(Updater.UpdateResult.NO_UPDATE)) { //Up to date, as far as we know
                     MessageSender.sendMsg(sender, "&bThe plugin is up to date.");
-                }
+                } 
             }
             MessageSender.sendMsg(sender, "&bType &a/econ ? &bfor help.");
         } else if (args[0].equalsIgnoreCase("?")) {
@@ -172,6 +174,9 @@ public class EconCommandExecutor implements CommandExecutor {
         }
 
         Updater updater = new FeatherUpdater(plugin, Constants.UPDATER_ID, pluginFile, Updater.UpdateType.DEFAULT, true);
+        
+        MessageSender.log("&a" + sender.getName() + ": &bPerformed update check");
+        MessageSender.log("&bResult: &r" + updater.getResult().toString());
 
         if (updater.getResult().equals(Updater.UpdateResult.NO_UPDATE)) {
             MessageSender.sendMsg(sender, "&bThe plugin is up to date.");

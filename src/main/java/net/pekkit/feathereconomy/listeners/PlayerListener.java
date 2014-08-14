@@ -64,9 +64,11 @@ public class PlayerListener implements Listener {
             MessageSender.log("&bSet &a" + player.getName() + "'s &bbalance to &a" + balance);
         }
 
-        if (player.hasPermission("feathereconomy.update") && plugin.isUpdateAvail()) {
+        if (player.hasPermission("feathereconomy.update")) {
             if (plugin.getUpdateResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE)) { //Needs update
                 MessageSender.sendMsg(player, "&bAn update is available! Type &a/econ update&b to download.");
+            } else if (plugin.getUpdateResult().equals(Updater.UpdateResult.SUCCESS)) {
+                MessageSender.sendMsg(player, "&bAn update has been downloaded! Restart the server to activate.");
             }
         }
     }
