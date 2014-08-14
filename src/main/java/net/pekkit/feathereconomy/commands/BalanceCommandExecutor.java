@@ -93,7 +93,7 @@ public class BalanceCommandExecutor implements CommandExecutor {
             }
             int balance = fa.getBalance(other.getUniqueId());
 
-            String currency = fa.getCurrencyName(other.addPotionEffect(null));
+            String currency = fa.getCurrencyName(other.getUniqueId());
 
             MessageSender.sendMsg(sender, ChatColor.GREEN + other.getName() + "'s &bbalance: &a" + balance + " " + currency);
             return true;

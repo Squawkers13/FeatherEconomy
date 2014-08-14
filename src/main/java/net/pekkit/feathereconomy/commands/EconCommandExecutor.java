@@ -132,7 +132,7 @@ public class EconCommandExecutor implements CommandExecutor {
             return;
         }
 
-        if (amount <= 0) {
+        if (amount < 0) {
             MessageSender.sendMsg(sender, "&4The amount must be positive!");
             return;
         }

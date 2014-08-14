@@ -141,7 +141,18 @@ public class FeatherAPI {
      * @return The name of the server's currency
      */
     public String getCurrencyName(UUID uuid) {
-        if (getBalance(uuid) == 1) {
+        return getCurrencyName(getBalance(uuid));
+    }
+    
+    /** Fetches the name of the server's currency.
+     * This method returns the appropriate form based
+     * on the specified balance.
+     * 
+     * @param i The balance to 
+     * @return The name of the server's currency
+     */
+    public String getCurrencyName(int i) {
+        if (i == 1) {
             return getCurrencyName(false);
         } else {
             return getCurrencyName(true);

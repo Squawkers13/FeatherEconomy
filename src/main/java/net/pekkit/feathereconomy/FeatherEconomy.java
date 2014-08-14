@@ -36,9 +36,9 @@ import net.pekkit.feathereconomy.util.Version;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-/** FeatherEconomy- light as a feather
- * Simple and lightweight economy plugin.
- * 
+/**
+ * FeatherEconomy- light as a feather Simple and lightweight economy plugin.
+ *
  * @author Squawkers13
  */
 public class FeatherEconomy extends JavaPlugin {
@@ -50,7 +50,7 @@ public class FeatherEconomy extends JavaPlugin {
     private EDataHandler edh;
 
     private PlayerListener pl;
-    
+
     private FeatherAPI fa;
 
     /**
@@ -104,8 +104,8 @@ public class FeatherEconomy extends JavaPlugin {
         } else { //Error
             MessageSender.log("&cAn error occured while updating: &r" + updater.getResult().toString());
         }
-        
-         long taskDelay = getConfig().getLong("settings.general.update-interval", 43200) * 20;
+
+        long taskDelay = getConfig().getLong("settings.general.update-interval", 43200) * 20;
 
         if (taskDelay > 0) {
             new TaskUpdateCheck(this, getFile()).runTaskTimer(this, taskDelay, taskDelay);
@@ -120,11 +120,11 @@ public class FeatherEconomy extends JavaPlugin {
                 // Failed to submit the stats :-(
             }
         }
-        
+
         dm = new DatabaseManager(this);
 
         edh = new EDataHandler(this, dm);
-        
+
         fa = new FeatherAPI(this, edh);
 
         pl = new PlayerListener(this, fa);
@@ -165,15 +165,16 @@ public class FeatherEconomy extends JavaPlugin {
 
     /**
      * Internal use only please!
+     * 
      * @param result
      */
     public void setUpdateResult(UpdateResult result) {
         updateResult = result;
     }
-    
+
     /**
      * Gets the plugin's API.
-     * 
+     *
      * @return API instance
      * @see FeatherAPI
      */
