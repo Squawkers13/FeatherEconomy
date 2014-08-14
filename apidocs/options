@@ -1,0 +1,24 @@
+-classpath
+'C:/Users/Luke/Documents/NetBeansProjects/FeatherEconomy/target/classes;C:/Users/Luke/.m2/repository/net/gravitydevelopment/updater/updater/2.3/updater-2.3.jar;C:/Users/Luke/.m2/repository/org/mcstats/bukkit/metrics/R8-SNAPSHOT/metrics-R8-SNAPSHOT.jar;C:/Users/Luke/.m2/repository/org/bukkit/bukkit/1.7.10-R0.1-SNAPSHOT/bukkit-1.7.10-R0.1-SNAPSHOT.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'C:/Users/Luke/Documents/NetBeansProjects/FeatherEconomy/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2014. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Luke/Documents/NetBeansProjects/FeatherEconomy/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'FeatherEconomy 1.0.1 API'
+-linkoffline
+'http://docs.oracle.com/javase/6/docs/api' 'C:/Users/Luke/Documents/NetBeansProjects/FeatherEconomy/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'FeatherEconomy 1.0.1 API'
