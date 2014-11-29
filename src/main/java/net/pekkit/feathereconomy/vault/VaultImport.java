@@ -95,7 +95,7 @@ public class VaultImport {
                     OfflinePlayer[] players = plugin.getServer().getOfflinePlayers();
                     int lastPercent = -1;
                     for (int i = 0; i < players.length; i++) {
-                        int balance = (int) economy.getBalance(players[i].getName());
+                        int balance = (int) economy.getBalance(players[i]);
                         plugin.getAPI().setBalance(players[i].getUniqueId(), balance);
                         int percent = (int) (i / players.length * 100.0D);
                         if ((percent % 10 == 0) && (percent != lastPercent)) {
