@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import net.gravitydevelopment.updater.Updater;
 import net.gravitydevelopment.updater.Updater.UpdateResult;
+import net.milkbowl.vault.economy.Economy;
 import net.pekkit.feathereconomy.api.FeatherAPI;
 import net.pekkit.feathereconomy.commands.BalanceCommandExecutor;
 import net.pekkit.feathereconomy.commands.EconCommandExecutor;
@@ -33,6 +34,11 @@ import net.pekkit.feathereconomy.updater.TaskUpdateCheck;
 import net.pekkit.feathereconomy.util.Constants;
 import net.pekkit.feathereconomy.util.FeatherUtils;
 import net.pekkit.feathereconomy.util.Version;
+import net.pekkit.feathereconomy.vault.Economy_FeatherEcon;
+import net.pekkit.feathereconomy.vault.VaultImport;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
@@ -52,6 +58,8 @@ public class FeatherEconomy extends JavaPlugin {
     private PlayerListener pl;
 
     private FeatherAPI fa;
+    
+    private VaultImport va;
 
     /**
      *
@@ -142,6 +150,22 @@ public class FeatherEconomy extends JavaPlugin {
 
         getCommand("pay").setExecutor(new PayCommandExecutor(this, fa));
 
+        Plugin vault = getServer().getPluginManager().getPlugin("Vault");
+        if (vault != null) {
+            va = new VaultImport(this);
+            if (getConfig().getBoolean("settings.advanced.register-vault", true)) {
+                ServicesManager manager = getServer().getServicesManager();
+                Class<? extends Economy> clazz = Economy_FeatherEcon.class;
+                String name = "FeatherEconomy";
+                try {
+                    Economy econ = (Economy) clazz.getConstructor(new Class[]{FeatherEconomy.class}).newInstance(new Object[]{this});
+                    manager.register(Economy.class, econ, vault, ServicePriority.Highest);
+                    vault.getLogger().info(String.format("[Economy] %s found: %s", new Object[]{name, econ.isEnabled() ? "Loaded" : "Waiting"}));
+                } catch (Exception e) {
+                    vault.getLogger().severe(String.format("[Economy] There was an error hooking %s - check to make sure you're using a compatible version!", new Object[]{name}));
+                }
+            }
+        }
     }
 
     /**

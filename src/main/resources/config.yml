@@ -19,6 +19,10 @@ settings:
         # The amount of money players recieve when they join for the first time. 
         # Set to 0 and they won't get any.
         default-balance: 100
+    advanced:
+        # Whether to register with Vault or not.
+        # It is recommended that you don't change this.
+        register-vault: true
     # DO NOT TOUCH THIS!!!
     # This is essential to the survival of your configuration settings!
     config-version: 1.0
