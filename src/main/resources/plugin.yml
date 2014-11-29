@@ -26,9 +26,6 @@ permissions:
     feathereconomy.set:
         description: Set a player's balance.
         default: op
-    feathereconomy.update:
-        description: Be notified of and manually download updates.
-        default: op
     feathereconomy.reload:
         description: Reload the plugin's configuration.
         default: op

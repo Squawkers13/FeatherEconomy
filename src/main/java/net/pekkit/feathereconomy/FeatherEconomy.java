@@ -1,25 +1,30 @@
 /*
- * Copyright (C) 2014 Squawkers13
+ * The MIT License (MIT)
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright (C) 2014 Squawkers13 <Squawkers13@pekkit.net>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package net.pekkit.feathereconomy;
 
 import java.io.File;
 import java.io.IOException;
-import net.gravitydevelopment.updater.Updater;
-import net.gravitydevelopment.updater.Updater.UpdateResult;
 import net.milkbowl.vault.economy.Economy;
 import net.pekkit.feathereconomy.api.FeatherAPI;
 import net.pekkit.feathereconomy.commands.BalanceCommandExecutor;
@@ -29,8 +34,6 @@ import net.pekkit.feathereconomy.data.DatabaseManager;
 import net.pekkit.feathereconomy.data.EDataHandler;
 import net.pekkit.feathereconomy.listeners.PlayerListener;
 import net.pekkit.feathereconomy.locale.MessageSender;
-import net.pekkit.feathereconomy.updater.FeatherUpdater;
-import net.pekkit.feathereconomy.updater.TaskUpdateCheck;
 import net.pekkit.feathereconomy.util.Constants;
 import net.pekkit.feathereconomy.util.FeatherUtils;
 import net.pekkit.feathereconomy.util.Version;
@@ -48,9 +51,6 @@ import org.mcstats.Metrics;
  * @author Squawkers13
  */
 public class FeatherEconomy extends JavaPlugin {
-
-    private Updater updater;
-    private UpdateResult updateResult;
 
     private DatabaseManager dm;
     private EDataHandler edh;
@@ -71,7 +71,7 @@ public class FeatherEconomy extends JavaPlugin {
         Version installed = FeatherUtils.getServerVersion(getServer().getVersion());
         Version required = new Version(Constants.MIN_MINECRAFT_VERSION);
         if (installed.compareTo(required) < 0) {
-            MessageSender.log("&4This plugin requires &cCraftBukkit 1.7.10 &4or higher!");
+            MessageSender.log("&4This plugin requires &cCraftBukkit 1.7.9 &4or higher!");
             MessageSender.log("&4Disabling...");
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -90,39 +90,6 @@ public class FeatherEconomy extends JavaPlugin {
                 MessageSender.logStackTrace("Error while renaming config!", ex);
             }
             saveResource("config.yml", true);
-        }
-
-        // --- Updater registration ---
-        if (getConfig().getBoolean("update-check", true)) {
-            if (getConfig().getBoolean("settings.general.auto-update", true)) {
-                MessageSender.log("&bPerforming update check...");
-                updater = new FeatherUpdater(this, Constants.UPDATER_ID, getFile(), Updater.UpdateType.DEFAULT, true);
-                updateResult = updater.getResult();
-            } else {
-                MessageSender.log("&bPerforming update check...");
-                updater = new FeatherUpdater(this, Constants.UPDATER_ID, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
-                updateResult = updater.getResult();
-            }
-        } else {
-            MessageSender.log("&cUpdate checking has been disabled!");
-            MessageSender.log("&cPlease regularly check for updates by running &a/econ update&c!");
-        }
-        if (updateResult == null) {
-            //Do nothing
-        } else if (updateResult.equals(Updater.UpdateResult.UPDATE_AVAILABLE)) { //Needs update
-            MessageSender.log("&bUpdate found! Type /econ update to download.");
-        } else if (updateResult.equals(Updater.UpdateResult.SUCCESS)) { //Update downloaded
-            MessageSender.log("&bUpdate downloaded! Restart the server to activate.");
-        } else if (updateResult.equals(Updater.UpdateResult.NO_UPDATE)) { //Up to date
-            MessageSender.log("&bThe plugin is up to date.");
-        } else { //Error
-            MessageSender.log("&cAn error occured while updating: &r" + updater.getResult().toString());
-        }
-
-        long taskDelay = getConfig().getLong("settings.general.update-interval", 43200) * 20;
-
-        if (taskDelay > 0) {
-            new TaskUpdateCheck(this, getFile()).runTaskTimer(this, taskDelay, taskDelay);
         }
 
         // --- MCStats submission ---
@@ -144,7 +111,7 @@ public class FeatherEconomy extends JavaPlugin {
         pl = new PlayerListener(this, fa);
         getServer().getPluginManager().registerEvents(pl, this);
 
-        getCommand("econ").setExecutor(new EconCommandExecutor(this, fa, getFile()));
+        getCommand("econ").setExecutor(new EconCommandExecutor(this, fa));
 
         getCommand("balance").setExecutor(new BalanceCommandExecutor(this, fa));
 
@@ -174,23 +141,6 @@ public class FeatherEconomy extends JavaPlugin {
     @Override
     public void onDisable() {
         //Nothing here yet!
-    }
-
-    /**
-     *
-     * @return
-     */
-    public UpdateResult getUpdateResult() {
-        return updateResult;
-    }
-
-    /**
-     * Internal use only please!
-     *
-     * @param result
-     */
-    public void setUpdateResult(UpdateResult result) {
-        updateResult = result;
     }
 
     /**

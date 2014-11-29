@@ -1,13 +1,6 @@
 settings:
     # General plugin settings. 
     general:
-        # Enables automatic downloading of updates.
-        # NOTE: If you're looking to disable update checking COMPLETELY, refert to the plugin page on BukkitDev.
-        auto-update: true
-        # How often (in seconds) to check for updates.
-        # Set to 0 to disable.
-        # NOTE: If this is set to 0, an update check will STILL be performed on startup!
-        update-interval: 43200 
         # Whether to anonymously send some trivial data (version, max players, etc) to the MCStats servers.
         stats: true
     # Economy settings.
@@ -25,7 +18,7 @@ settings:
         register-vault: true
     # DO NOT TOUCH THIS!!!
     # This is essential to the survival of your configuration settings!
-    config-version: 1.0
+    config-version: 1.1
             
     
         

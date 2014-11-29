@@ -1,28 +1,33 @@
 /*
- * Copyright (C) 2014 Squawkers13
+ * The MIT License (MIT)
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright (C) 2014 Squawkers13 <Squawkers13@pekkit.net>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package net.pekkit.feathereconomy.commands;
 
 import java.io.File;
 import java.io.IOException;
-import net.gravitydevelopment.updater.Updater;
 import net.pekkit.feathereconomy.FeatherEconomy;
 import net.pekkit.feathereconomy.api.FeatherAPI;
 import net.pekkit.feathereconomy.locale.MessageSender;
-import net.pekkit.feathereconomy.updater.FeatherUpdater;
 import net.pekkit.feathereconomy.util.Constants;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -38,18 +43,15 @@ public class EconCommandExecutor implements CommandExecutor {
 
     private final FeatherEconomy plugin;
     private final FeatherAPI fa;
-    private final File pluginFile;
 
     /**
      *
      * @param par1
      * @param par2
-     * @param par3
      */
-    public EconCommandExecutor(FeatherEconomy par1, FeatherAPI par2, File par3) {
+    public EconCommandExecutor(FeatherEconomy par1, FeatherAPI par2) {
         plugin = par1;
         fa = par2;
-        pluginFile = par3;
     }
 
     /**
@@ -64,24 +66,11 @@ public class EconCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 1) {
             MessageSender.sendMsg(sender, "&bFeatherEconomy &a" + plugin.getDescription().getVersion() + ", &bcreated by &aSquawkers13");
-            if (sender.hasPermission("feathereconomy.update")) {
-                if (plugin.getUpdateResult() == null) {
-                    MessageSender.sendMsg(sender, "&cUnable to determine update status! Please run &a/econ update&c.");
-                } else if (plugin.getUpdateResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE)) { //Needs update
-                    MessageSender.sendMsg(sender, "&bUpdate available: Type &a/econ update&b to download.");
-                } else if (plugin.getUpdateResult().equals(Updater.UpdateResult.SUCCESS)) { //Update downloaded
-                    MessageSender.sendMsg(sender, "&bUpdate downloaded: Restart the server to activate.");
-                } else if (plugin.getUpdateResult().equals(Updater.UpdateResult.NO_UPDATE)) { //Up to date, as far as we know
-                    MessageSender.sendMsg(sender, "&bThe plugin is up to date.");
-                } 
-            }
             MessageSender.sendMsg(sender, "&bType &a/econ ? &bfor help.");
         } else if (args[0].equalsIgnoreCase("?")) {
             helpCommand(sender);
         } else if (args[0].equalsIgnoreCase("set")) {
             setCommand(sender, args);
-        } else if (args[0].equalsIgnoreCase("update")) {
-            updateCommand(sender);
         } else if (args[0].equalsIgnoreCase("reload")) {
             reloadCommand(sender);
         } else { //Invalid arguments
@@ -100,9 +89,6 @@ public class EconCommandExecutor implements CommandExecutor {
         MessageSender.sendMsg(sender, "&3---------- &bFeatherEconomy: &aHelp &3----------");
         if (sender.hasPermission("feathereconomy.set")) {
             MessageSender.sendMsg(sender, "&b/econ &aset &3[player] [value] &b- Set a player's balance.");
-        }
-        if (sender.hasPermission("feathereconomy.update")) {
-            MessageSender.sendMsg(sender, "&b/econ &aupdate &b- Download an update to the plugin, if available.");
         }
         if (sender.hasPermission("feathereconomy.reload")) {
             MessageSender.sendMsg(sender, "&b/econ &areload &b- Reload the plugin's configuration.");
@@ -161,30 +147,6 @@ public class EconCommandExecutor implements CommandExecutor {
 
         MessageSender.log("&a" + sender.getName() + ": &bSet &a" + player.getName() + "'s &b balance to &a" + amount);
 
-    }
-
-    /**
-     *
-     * @param sender
-     */
-    public void updateCommand(CommandSender sender) {
-        if (!sender.hasPermission("feathereconomy.update")) {
-            MessageSender.sendMsg(sender, "&cYou don't have permission to update the plugin!");
-            return;
-        }
-
-        Updater updater = new FeatherUpdater(plugin, Constants.UPDATER_ID, pluginFile, Updater.UpdateType.DEFAULT, true);
-        
-        MessageSender.log("&a" + sender.getName() + ": &bPerformed update check");
-        MessageSender.log("&bResult: &r" + updater.getResult().toString());
-
-        if (updater.getResult().equals(Updater.UpdateResult.NO_UPDATE)) {
-            MessageSender.sendMsg(sender, "&bThe plugin is up to date.");
-        } else if (updater.getResult().equals(Updater.UpdateResult.SUCCESS)) {
-            MessageSender.sendMsg(sender, "&bUpdate downloaded! Restart the server to activate.");
-        } else {
-            MessageSender.sendMsg(sender, "&cAn error occured while updating: &r" + updater.getResult().toString());
-        }
     }
 
     /**
