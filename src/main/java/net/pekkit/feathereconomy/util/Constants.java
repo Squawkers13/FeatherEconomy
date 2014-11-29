@@ -37,7 +37,7 @@ public class Constants {
     /**
      *
      */
-    public static final double CONFIG_VERSION = 1.0;
+    public static final double CONFIG_VERSION = 1.1;
     
     /**
      *
