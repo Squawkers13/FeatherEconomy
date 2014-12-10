@@ -3,7 +3,7 @@ main: net.pekkit.feathereconomy.FeatherEconomy
 version: maven-version-number
 description: Light as a feather
 author: Squawkers13
-website: http://dev.bukkit.org/bukkit-plugins/feather-economy/
+website: http://www.spigotmc.org/resources/feathereconomy.2082/
 commands:
     econ:
         aliases: [feathereconomy, economy, eco, fe]
