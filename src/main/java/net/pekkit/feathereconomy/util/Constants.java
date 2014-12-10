@@ -37,11 +37,5 @@ public class Constants {
     /**
      *
      */
-    public static final double CONFIG_VERSION = 1.1;
-    
-    /**
-     *
-     */
-    public static final int UPDATER_ID = 83676;
-    
+    public static final double CONFIG_VERSION = 1.1;  
 }
