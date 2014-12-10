@@ -35,7 +35,7 @@
     </properties>
     <name>FeatherEconomy</name>
     <description>Light as a feather</description>
-    <url>http://dev.bukkit.org/bukkit-plugins/feather-economy/</url>
+    <url>http://www.spigotmc.org/resources/feathereconomy.2082/</url>
     <repositories>
         <repository>
             <id>Spigot</id>
