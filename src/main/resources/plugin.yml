@@ -5,9 +5,9 @@ description: Light as a feather
 author: Squawkers13
 website: http://www.spigotmc.org/resources/feathereconomy.2082/
 commands:
-    econ:
-        aliases: [feathereconomy, economy, eco, fe]
-        description: Manage the server's economy.
+    fe:
+        aliases: [feathereconomy, economy, econ, eco]
+        description: Base command for FeatherEconomy.
     balance:
         aliases: [bal, money]
         description: View your balance.

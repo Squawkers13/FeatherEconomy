@@ -33,6 +33,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -64,21 +65,35 @@ public class EconCommandExecutor implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length < 1) {
-            MessageSender.sendMsg(sender, "&bFeatherEconomy &a" + plugin.getDescription().getVersion() + ", &bcreated by &aSquawkers13");
-            MessageSender.sendMsg(sender, "&bType &a/econ ? &bfor help.");
-        } else if (args[0].equalsIgnoreCase("?")) {
-            helpCommand(sender);
-        } else if (args[0].equalsIgnoreCase("set")) {
-            setCommand(sender, args);
-        } else if (args[0].equalsIgnoreCase("reload")) {
-            reloadCommand(sender);
-        } else { //Invalid arguments
-            MessageSender.sendMsg(sender, "&bThat is not a valid sub-command!");
-            MessageSender.sendMsg(sender, "&bType &a/econ ?&b for a list of commands.");
+        if (command.getName().equalsIgnoreCase("fe")) {
+            baseCommand(command, sender, args);
+        } else if (command.getName().equalsIgnoreCase("balance")) {
+            balanceCommand(command, sender, args);
+        } else if (command.getName().equalsIgnoreCase("pay")) {
+            payCommand(command, sender, args);
         }
         return true;
 
+    }
+
+    public void baseCommand(Command command, CommandSender sender, String[] args) {
+        if (args.length < 1) {
+            MessageSender.sendMsg(sender, "&bFeatherEconomy &a" + plugin.getDescription().getVersion() + ", &bcreated by &aSquawkers13");
+            MessageSender.sendMsg(sender, "&bType &a/fe ? &bfor help.");
+        } else if (args[0].equalsIgnoreCase("?")) {
+            helpCommand(sender);
+        } else if (args[0].equalsIgnoreCase("balance") || args[0].equalsIgnoreCase("b")) {
+            balanceCommand(command, sender, args);
+        } else if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("s")) {
+            setCommand(sender, args);
+        } else if (args[0].equalsIgnoreCase("pay") || args[0].equalsIgnoreCase("p")) {
+            payCommand(command, sender, args);
+        } else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("r")) {
+            reloadCommand(sender);
+        } else { //Invalid arguments
+            MessageSender.sendMsg(sender, "&bThat is not a valid sub-command!");
+            MessageSender.sendMsg(sender, "&bType &a/fe ?&b for a list of commands.");
+        }
     }
 
     /**
@@ -87,11 +102,218 @@ public class EconCommandExecutor implements CommandExecutor {
      */
     public void helpCommand(CommandSender sender) {
         MessageSender.sendMsg(sender, "&3---------- &bFeatherEconomy: &aHelp &3----------");
+        if (sender.hasPermission("feathereconomy.balance.view")) {
+            MessageSender.sendMsg(sender, "&b/fe &abalance,b &2<player> &b- View a player's balance, or your own.");
+        }
         if (sender.hasPermission("feathereconomy.set")) {
-            MessageSender.sendMsg(sender, "&b/econ &aset &3[player] [value] &b- Set a player's balance.");
+            MessageSender.sendMsg(sender, "&b/fe &aset,s &3[player] [value] &b- Set a player's balance.");
+        }
+        if (sender.hasPermission("feathereconomy.pay")) {
+            MessageSender.sendMsg(sender, "&b/fe &apay,p &3[player] [value] &b- Pay a player.");
         }
         if (sender.hasPermission("feathereconomy.reload")) {
-            MessageSender.sendMsg(sender, "&b/econ &areload &b- Reload the plugin's configuration.");
+            MessageSender.sendMsg(sender, "&b/fe &areload,r &b- Reload the plugin's configuration.");
+        }
+    }
+
+    public void balanceCommand(Command command, CommandSender sender, String[] args) {
+        if (command.getName().equalsIgnoreCase("fe")) {
+            if (args.length < 2) {
+                if (sender instanceof ConsoleCommandSender) {
+                    MessageSender.sendMsg(sender, "&bYour balance: &aInfinite");
+                } else {
+                    Player player = (Player) sender;
+                    if (!player.hasPermission("feathereconomy.balance.view")) {
+                        MessageSender.sendMsg(player, "&cYou don't have permission to view your balance!");
+                        return;
+                    }
+                    int balance = fa.getBalance(player.getUniqueId());
+
+                    String currency = fa.getCurrencyName(player.getUniqueId());
+
+                    MessageSender.sendMsg(player, "&bYour balance: &a" + balance + " " + currency);
+                }
+            } else {
+                if (!sender.hasPermission("feathereconomy.balance.other")) {
+                    MessageSender.sendMsg(sender, "&cYou don't have permission to view another player's balance!");
+                    return;
+                }
+                Player other = null;
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
+                    if (p.getName().equalsIgnoreCase(args[1])) {
+                        other = p;
+                        break;
+                    }
+                }
+
+                if (other == null) {
+                    MessageSender.sendMsg(sender, "&4That player is not online!");
+                    return;
+                }
+                int balance = fa.getBalance(other.getUniqueId());
+
+                String currency = fa.getCurrencyName(other.getUniqueId());
+
+                MessageSender.sendMsg(sender, ChatColor.GREEN + other.getName() + "'s &bbalance: &a" + balance + " " + currency);
+            }
+        } else if (command.getName().equalsIgnoreCase("balance")) {
+            if (args.length < 1) {
+                if (sender instanceof ConsoleCommandSender) {
+
+                    MessageSender.sendMsg(sender, "&bYour balance: &aInfinite");
+                } else {
+                    Player player = (Player) sender;
+                    if (!player.hasPermission("feathereconomy.balance.view")) {
+                        MessageSender.sendMsg(player, "&cYou don't have permission to view your balance!");
+                        return;
+                    }
+                    int balance = fa.getBalance(player.getUniqueId());
+
+                    String currency = fa.getCurrencyName(player.getUniqueId());
+
+                    MessageSender.sendMsg(player, "&bYour balance: &a" + balance + " " + currency);
+                }
+            } else {
+
+                if (!sender.hasPermission("feathereconomy.balance.other")) {
+                    MessageSender.sendMsg(sender, "&cYou don't have permission to view another player's balance!");
+                    return;
+                }
+                Player other = null;
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
+                    if (p.getName().equalsIgnoreCase(args[0])) {
+                        other = p;
+                        break;
+                    }
+                }
+
+                if (other == null) {
+                    MessageSender.sendMsg(sender, "&4That player is not online!");
+                    return;
+                }
+                int balance = fa.getBalance(other.getUniqueId());
+
+                String currency = fa.getCurrencyName(other.getUniqueId());
+
+                MessageSender.sendMsg(sender, ChatColor.GREEN + other.getName() + "'s &bbalance: &a" + balance + " " + currency);
+            }
+        }
+    }
+
+    public void payCommand(Command command, CommandSender sender, String[] args) {
+        if (!sender.hasPermission("feathereconomy.pay")) {
+                MessageSender.sendMsg(sender, "&cYou don't have permission to pay another player!");
+                return;
+            }
+        
+        if (command.getName().equalsIgnoreCase("fe")) {
+            if (args.length < 3) {
+                MessageSender.sendMsg(sender, "&4Invalid arguments!");
+                MessageSender.sendMsg(sender, "&4The correct syntax is: &b/fe pay &a[player] [amount]");
+                return;
+            }
+
+            int amount;
+            try {
+                amount = Integer.valueOf(args[2]);
+            } catch (NumberFormatException e) {
+                MessageSender.sendMsg(sender, "&4The amount must be an integer!");
+                return;
+            }
+
+            if (amount <= 0) {
+                MessageSender.sendMsg(sender, "&4The amount must be positive!");
+                return;
+            }
+
+            Player player = null;
+            for (Player p : plugin.getServer().getOnlinePlayers()) {
+                if (p.getName().equalsIgnoreCase(args[1])) {
+                    player = p;
+                    break;
+                }
+            }
+
+            if (player == null) {
+                MessageSender.sendMsg(sender, "&4That player is not online!");
+                return;
+            }
+
+            if (sender instanceof ConsoleCommandSender) {
+                fa.depositPlayer(player.getUniqueId(), amount);
+
+                String currency = fa.getCurrencyName(player.getUniqueId());
+
+                MessageSender.sendMsg(sender, "&bYou gave &a" + player.getName() + " " + amount + " " + currency + ".");
+                MessageSender.sendMsg(player, "&bYou were given &a" + +amount + " " + currency + " &bby &a" + sender.getName() + ".");
+            } else {
+                Player cmd = (Player) sender;
+                if (!fa.canAffordWithdrawal(cmd.getUniqueId(), amount)) {
+                    MessageSender.sendMsg(cmd, "&4You don't have enough money to do that!");
+                    return;
+                }
+
+                fa.payPlayer(cmd.getUniqueId(), player.getUniqueId(), amount);
+
+                String currency = fa.getCurrencyName(player.getUniqueId());
+
+                MessageSender.sendMsg(cmd, "&bYou gave &a" + player.getName() + " " + amount + " " + currency + ".");
+                MessageSender.sendMsg(player, "&bYou were given &a" + +amount + " " + currency + " &bby &a" + cmd.getName() + ".");
+            }
+        } else if (command.getName().equalsIgnoreCase("pay")) {
+            if (args.length < 2) {
+                MessageSender.sendMsg(sender, "&4Invalid arguments!");
+                MessageSender.sendMsg(sender, "&4The correct syntax is: &b/pay &a[player] [amount]");
+                return;
+            }
+
+            int amount;
+            try {
+                amount = Integer.valueOf(args[1]);
+            } catch (NumberFormatException e) {
+                MessageSender.sendMsg(sender, "&4The amount must be an integer!");
+                return;
+            }
+
+            if (amount <= 0) {
+                MessageSender.sendMsg(sender, "&4The amount must be positive!");
+                return;
+            }
+
+            Player player = null;
+            for (Player p : plugin.getServer().getOnlinePlayers()) {
+                if (p.getName().equalsIgnoreCase(args[0])) {
+                    player = p;
+                    break;
+                }
+            }
+
+            if (player == null) {
+                MessageSender.sendMsg(sender, "&4That player is not online!");
+                return;
+            }
+
+            if (sender instanceof ConsoleCommandSender) {
+                fa.depositPlayer(player.getUniqueId(), amount);
+
+                String currency = fa.getCurrencyName(player.getUniqueId());
+
+                MessageSender.sendMsg(sender, "&bYou gave &a" + player.getName() + " " + amount + " " + currency + ".");
+                MessageSender.sendMsg(player, "&bYou were given &a" + +amount + " " + currency + " &bby &a" + sender.getName() + ".");
+            } else {
+                Player cmd = (Player) sender;
+                if (!fa.canAffordWithdrawal(cmd.getUniqueId(), amount)) {
+                    MessageSender.sendMsg(cmd, "&4You don't have enough money to do that!");
+                    return;
+                }
+
+                fa.payPlayer(cmd.getUniqueId(), player.getUniqueId(), amount);
+
+                String currency = fa.getCurrencyName(player.getUniqueId());
+
+                MessageSender.sendMsg(cmd, "&bYou gave &a" + player.getName() + " " + amount + " " + currency + ".");
+                MessageSender.sendMsg(player, "&bYou were given &a" + +amount + " " + currency + " &bby &a" + cmd.getName() + ".");
+            }
         }
     }
 
@@ -108,7 +330,7 @@ public class EconCommandExecutor implements CommandExecutor {
 
         if (args.length < 3) {
             MessageSender.sendMsg(sender, "&4Invalid arguments!");
-            MessageSender.sendMsg(sender, "&4The correct syntax is: &b/econ &aset &3[player] [value]");
+            MessageSender.sendMsg(sender, "&4The correct syntax is: &b/fe &aset &3[player] [value]");
             return;
         }
 

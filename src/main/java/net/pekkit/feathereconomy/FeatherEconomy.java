@@ -27,9 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import net.milkbowl.vault.economy.Economy;
 import net.pekkit.feathereconomy.api.FeatherAPI;
-import net.pekkit.feathereconomy.commands.BalanceCommandExecutor;
 import net.pekkit.feathereconomy.commands.EconCommandExecutor;
-import net.pekkit.feathereconomy.commands.PayCommandExecutor;
 import net.pekkit.feathereconomy.data.DatabaseManager;
 import net.pekkit.feathereconomy.data.EDataHandler;
 import net.pekkit.feathereconomy.listeners.PlayerListener;
@@ -54,6 +52,8 @@ public class FeatherEconomy extends JavaPlugin {
 
     private DatabaseManager dm;
     private EDataHandler edh;
+    
+    private EconCommandExecutor ece;
 
     private PlayerListener pl;
 
@@ -113,12 +113,14 @@ public class FeatherEconomy extends JavaPlugin {
 
         pl = new PlayerListener(this, fa);
         getServer().getPluginManager().registerEvents(pl, this);
+        
+        ece = new EconCommandExecutor(this, fa);
 
-        getCommand("econ").setExecutor(new EconCommandExecutor(this, fa));
+        getCommand("econ").setExecutor(ece);
 
-        getCommand("balance").setExecutor(new BalanceCommandExecutor(this, fa));
+        getCommand("balance").setExecutor(ece);
 
-        getCommand("pay").setExecutor(new PayCommandExecutor(this, fa));
+        getCommand("pay").setExecutor(ece);
 
         Plugin vault = getServer().getPluginManager().getPlugin("Vault");
         if (vault != null) {
