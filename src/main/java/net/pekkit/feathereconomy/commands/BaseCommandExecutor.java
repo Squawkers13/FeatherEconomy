@@ -40,7 +40,7 @@ import org.bukkit.entity.Player;
  *
  * @author Squawkers13
  */
-public class EconCommandExecutor implements CommandExecutor {
+public class BaseCommandExecutor implements CommandExecutor {
 
     private final FeatherEconomy plugin;
     private final FeatherAPI fa;
@@ -50,7 +50,7 @@ public class EconCommandExecutor implements CommandExecutor {
      * @param par1
      * @param par2
      */
-    public EconCommandExecutor(FeatherEconomy par1, FeatherAPI par2) {
+    public BaseCommandExecutor(FeatherEconomy par1, FeatherAPI par2) {
         plugin = par1;
         fa = par2;
     }
@@ -389,11 +389,12 @@ public class EconCommandExecutor implements CommandExecutor {
         MessageSender.log(ChatColor.GREEN + sender.getName() + ": &bReloaded configuration");
 
         if (plugin.getConfig().getDouble("settings.config-version", -1.0D) != Constants.CONFIG_VERSION) {
-            MessageSender.sendMsg(sender, "&cIncompatible config detected! Renaming it to config-OLD.yml");
+            String old = plugin.getConfig().getString("settings.config-version", "old");
+            MessageSender.sendMsg(sender, "&cIncompatible config detected! Renaming it to config-" + old + ".yml");
             MessageSender.sendMsg(sender, "&cA new config has been created, please transfer your settings.");
             MessageSender.sendMsg(sender, "&cWhen you have finished, type &6/econ reload&c to load your settings.");
             try {
-                plugin.getConfig().save(new File(plugin.getDataFolder(), "config-OLD.yml"));
+                plugin.getConfig().save(new File(plugin.getDataFolder(), "config-" + old + ".yml"));
             } catch (IOException ex) {
                 MessageSender.logStackTrace("Error while renaming config!", ex);
             }
