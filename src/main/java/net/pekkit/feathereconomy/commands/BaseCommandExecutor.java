@@ -103,16 +103,16 @@ public class BaseCommandExecutor implements CommandExecutor {
     public void helpCommand(CommandSender sender) {
         MessageSender.sendMsg(sender, "&3---------- &bFeatherEconomy: &aHelp &3----------");
         if (sender.hasPermission("feathereconomy.balance.view")) {
-            MessageSender.sendMsg(sender, "&b/fe &abalance,b &2<player> &b- View a player's balance, or your own.");
+            MessageSender.sendMsg(sender, "&b/fe &ab,balance &2<player> &b- View a player's balance, or your own.");
         }
         if (sender.hasPermission("feathereconomy.set")) {
-            MessageSender.sendMsg(sender, "&b/fe &aset,s &3[player] [value] &b- Set a player's balance.");
+            MessageSender.sendMsg(sender, "&b/fe &as,set &3[player] [value] &b- Set a player's balance.");
         }
         if (sender.hasPermission("feathereconomy.pay")) {
-            MessageSender.sendMsg(sender, "&b/fe &apay,p &3[player] [value] &b- Pay a player.");
+            MessageSender.sendMsg(sender, "&b/fe &ap,pay &3[player] [value] &b- Pay a player.");
         }
         if (sender.hasPermission("feathereconomy.reload")) {
-            MessageSender.sendMsg(sender, "&b/fe &areload,r &b- Reload the plugin's configuration.");
+            MessageSender.sendMsg(sender, "&b/fe &ar,reload &b- Reload the plugin's configuration.");
         }
     }
 
