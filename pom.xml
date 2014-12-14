@@ -93,13 +93,11 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>net.gravitydevelopment.updater:updater</include>
                                     <include>org.mcstats.bukkit</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>net.gravitydevelopment.updater</pattern>
                                     <pattern>org.mcstats.bukkit</pattern>
                                     <shadedPattern>net.pekkit.feathereconomy</shadedPattern>
                                 </relocation>
