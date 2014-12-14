@@ -91,8 +91,8 @@ public class BaseCommandExecutor implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("r")) {
             reloadCommand(sender);
         } else { //Invalid arguments
-            MessageSender.sendMsg(sender, "&bThat is not a valid sub-command!");
-            MessageSender.sendMsg(sender, "&bType &a/fe ?&b for a list of commands.");
+            MessageSender.sendMsg(sender, "&bI'm not sure what you mean: &a" + args[0]);
+            MessageSender.sendMsg(sender, "&bType &a/fe ?&b for help.");
         }
     }
 
@@ -103,13 +103,13 @@ public class BaseCommandExecutor implements CommandExecutor {
     public void helpCommand(CommandSender sender) {
         MessageSender.sendMsg(sender, "&3---------- &bFeatherEconomy: &aHelp &3----------");
         if (sender.hasPermission("feathereconomy.balance.view")) {
-            MessageSender.sendMsg(sender, "&b/fe &ab,balance &3<player> &b- View a player's balance, or your own.");
+            MessageSender.sendMsg(sender, "&b/fe &ab,balance &3<player> &b- View a player's balance.");
         }
         if (sender.hasPermission("feathereconomy.set")) {
             MessageSender.sendMsg(sender, "&b/fe &as,set &3[player] [value] &b- Set a player's balance.");
         }
         if (sender.hasPermission("feathereconomy.pay")) {
-            MessageSender.sendMsg(sender, "&b/fe &ap,pay &3[player] [value] &b- Pay a player.");
+            MessageSender.sendMsg(sender, "&b/fe &ap,pay &3[player] [value] &b- Pay another player.");
         }
         if (sender.hasPermission("feathereconomy.reload")) {
             MessageSender.sendMsg(sender, "&b/fe &ar,reload &b- Reload the plugin's configuration.");
@@ -124,7 +124,7 @@ public class BaseCommandExecutor implements CommandExecutor {
                 } else {
                     Player player = (Player) sender;
                     if (!player.hasPermission("feathereconomy.balance.view")) {
-                        MessageSender.sendMsg(player, "&cYou don't have permission to view your balance!");
+                        MessageSender.sendMsg(player, "&cYou don't have permission to do that!");
                         return;
                     }
                     int balance = fa.getBalance(player.getUniqueId());
@@ -135,7 +135,7 @@ public class BaseCommandExecutor implements CommandExecutor {
                 }
             } else {
                 if (!sender.hasPermission("feathereconomy.balance.other")) {
-                    MessageSender.sendMsg(sender, "&cYou don't have permission to view another player's balance!");
+                    MessageSender.sendMsg(sender, "&cYou don't have permission to do that!");
                     return;
                 }
                 Player other = null;
@@ -147,7 +147,7 @@ public class BaseCommandExecutor implements CommandExecutor {
                 }
 
                 if (other == null) {
-                    MessageSender.sendMsg(sender, "&4That player is not online!");
+                    MessageSender.sendMsg(sender, "&cThat player is not online!");
                     return;
                 }
                 int balance = fa.getBalance(other.getUniqueId());
@@ -164,7 +164,7 @@ public class BaseCommandExecutor implements CommandExecutor {
                 } else {
                     Player player = (Player) sender;
                     if (!player.hasPermission("feathereconomy.balance.view")) {
-                        MessageSender.sendMsg(player, "&cYou don't have permission to view your balance!");
+                        MessageSender.sendMsg(player, "&cYou don't have permission to do that!");
                         return;
                     }
                     int balance = fa.getBalance(player.getUniqueId());
@@ -176,7 +176,7 @@ public class BaseCommandExecutor implements CommandExecutor {
             } else {
 
                 if (!sender.hasPermission("feathereconomy.balance.other")) {
-                    MessageSender.sendMsg(sender, "&cYou don't have permission to view another player's balance!");
+                    MessageSender.sendMsg(sender, "&cYou don't have permission to do that!");
                     return;
                 }
                 Player other = null;
@@ -188,7 +188,7 @@ public class BaseCommandExecutor implements CommandExecutor {
                 }
 
                 if (other == null) {
-                    MessageSender.sendMsg(sender, "&4That player is not online!");
+                    MessageSender.sendMsg(sender, "&cThat player is not online!");
                     return;
                 }
                 int balance = fa.getBalance(other.getUniqueId());
@@ -202,14 +202,14 @@ public class BaseCommandExecutor implements CommandExecutor {
 
     public void payCommand(Command command, CommandSender sender, String[] args) {
         if (!sender.hasPermission("feathereconomy.pay")) {
-                MessageSender.sendMsg(sender, "&cYou don't have permission to pay another player!");
+                MessageSender.sendMsg(sender, "&cYou don't have permission to do that!");
                 return;
             }
         
         if (command.getName().equalsIgnoreCase("fe")) {
             if (args.length < 3) {
-                MessageSender.sendMsg(sender, "&4Invalid arguments!");
-                MessageSender.sendMsg(sender, "&4The correct syntax is: &b/fe pay &a[player] [amount]");
+                MessageSender.sendMsg(sender, "&bPay another player.");
+                MessageSender.sendMsg(sender, "&b/fe pay &a[player] [amount]");
                 return;
             }
 
@@ -217,12 +217,12 @@ public class BaseCommandExecutor implements CommandExecutor {
             try {
                 amount = Integer.valueOf(args[2]);
             } catch (NumberFormatException e) {
-                MessageSender.sendMsg(sender, "&4The amount must be an integer!");
+                MessageSender.sendMsg(sender, "&cThe amount must be a whole number!");
                 return;
             }
 
             if (amount <= 0) {
-                MessageSender.sendMsg(sender, "&4The amount must be positive!");
+                MessageSender.sendMsg(sender, "&cThe amount must be positive!");
                 return;
             }
 
@@ -235,7 +235,7 @@ public class BaseCommandExecutor implements CommandExecutor {
             }
 
             if (player == null) {
-                MessageSender.sendMsg(sender, "&4That player is not online!");
+                MessageSender.sendMsg(sender, "&cThat player is not online!");
                 return;
             }
 
@@ -249,7 +249,7 @@ public class BaseCommandExecutor implements CommandExecutor {
             } else {
                 Player cmd = (Player) sender;
                 if (!fa.canAffordWithdrawal(cmd.getUniqueId(), amount)) {
-                    MessageSender.sendMsg(cmd, "&4You don't have enough money to do that!");
+                    MessageSender.sendMsg(cmd, "&cYou don't have enough money to do that!");
                     return;
                 }
 
@@ -262,8 +262,8 @@ public class BaseCommandExecutor implements CommandExecutor {
             }
         } else if (command.getName().equalsIgnoreCase("pay")) {
             if (args.length < 2) {
-                MessageSender.sendMsg(sender, "&4Invalid arguments!");
-                MessageSender.sendMsg(sender, "&4The correct syntax is: &b/pay &a[player] [amount]");
+                MessageSender.sendMsg(sender, "&bPay another player.");
+                MessageSender.sendMsg(sender, "&b/pay &a[player] [amount]");
                 return;
             }
 
@@ -271,12 +271,12 @@ public class BaseCommandExecutor implements CommandExecutor {
             try {
                 amount = Integer.valueOf(args[1]);
             } catch (NumberFormatException e) {
-                MessageSender.sendMsg(sender, "&4The amount must be an integer!");
+                MessageSender.sendMsg(sender, "&cThe amount must be a whole number!");
                 return;
             }
 
             if (amount <= 0) {
-                MessageSender.sendMsg(sender, "&4The amount must be positive!");
+                MessageSender.sendMsg(sender, "&cThe amount must be positive!");
                 return;
             }
 
@@ -289,7 +289,7 @@ public class BaseCommandExecutor implements CommandExecutor {
             }
 
             if (player == null) {
-                MessageSender.sendMsg(sender, "&4That player is not online!");
+                MessageSender.sendMsg(sender, "&cThat player is not online!");
                 return;
             }
 
@@ -303,7 +303,7 @@ public class BaseCommandExecutor implements CommandExecutor {
             } else {
                 Player cmd = (Player) sender;
                 if (!fa.canAffordWithdrawal(cmd.getUniqueId(), amount)) {
-                    MessageSender.sendMsg(cmd, "&4You don't have enough money to do that!");
+                    MessageSender.sendMsg(cmd, "&cYou don't have enough money to do that!");
                     return;
                 }
 
@@ -324,13 +324,13 @@ public class BaseCommandExecutor implements CommandExecutor {
      */
     public void setCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("feathereconomy.set")) {
-            MessageSender.sendMsg(sender, "&cYou don't have permission to set a player's balance!");
+            MessageSender.sendMsg(sender, "&cYou don't have permission to do that!");
             return;
         }
 
         if (args.length < 3) {
-            MessageSender.sendMsg(sender, "&4Invalid arguments!");
-            MessageSender.sendMsg(sender, "&4The correct syntax is: &b/fe &aset &3[player] [value]");
+            MessageSender.sendMsg(sender, "&bSet a player's balance.");
+            MessageSender.sendMsg(sender, "&b/fe &aset &3[player] [value]");
             return;
         }
 
@@ -338,12 +338,12 @@ public class BaseCommandExecutor implements CommandExecutor {
         try {
             amount = Integer.valueOf(args[2]);
         } catch (NumberFormatException e) {
-            MessageSender.sendMsg(sender, "&4The amount must be an integer!");
+            MessageSender.sendMsg(sender, "&cThe amount must be awhole number!");
             return;
         }
 
         if (amount < 0) {
-            MessageSender.sendMsg(sender, "&4The amount must be positive!");
+            MessageSender.sendMsg(sender, "&cThe amount must be positive!");
             return;
         }
 
@@ -356,7 +356,7 @@ public class BaseCommandExecutor implements CommandExecutor {
         }
 
         if (player == null) {
-            MessageSender.sendMsg(sender, "&4That player is not online!");
+            MessageSender.sendMsg(sender, "&cThat player is not online!");
             return;
         }
 
@@ -377,7 +377,7 @@ public class BaseCommandExecutor implements CommandExecutor {
      */
     public void reloadCommand(CommandSender sender) {
         if (!sender.hasPermission("feathereconomy.reload")) {
-            MessageSender.sendMsg(sender, "&cYou don't have permission to reload the configuration!");
+            MessageSender.sendMsg(sender, "&cYou don't have permission to do that!");
             return;
         }
         plugin.reloadConfig();
@@ -385,8 +385,6 @@ public class BaseCommandExecutor implements CommandExecutor {
         if (plugin.getConfig() == null) {
             plugin.saveResource("config.yml", true);
         }
-
-        MessageSender.log(ChatColor.GREEN + sender.getName() + ": &bReloaded configuration");
 
         if (plugin.getConfig().getDouble("settings.config-version", -1.0D) != Constants.CONFIG_VERSION) {
             String old = plugin.getConfig().getString("settings.config-version", "old");
