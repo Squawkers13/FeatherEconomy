@@ -4,6 +4,7 @@
 1. Tab completion?
 
 ##Future version `1.2`
-1. Last known name cache (so we can deal with offline players)
+1. Last known name cache (so we can deal with offline players better)
+2. Transaction log
 2. /balancetop command
 3. MySQL support
